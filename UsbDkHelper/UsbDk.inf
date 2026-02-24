@@ -14,3 +14,9 @@ KmdfService = UsbDk, UsbDk_Service_kmdfInst
 
 [UsbDk_Service_kmdfInst]
 KmdfLibraryVersion = 1.11
+
+[UsbDk.NTarm64.Wdf]
+KmdfService = UsbDk, UsbDk_Service_kmdfInst_arm64
+
+[UsbDk_Service_kmdfInst_arm64]
+KmdfLibraryVersion = 1.33

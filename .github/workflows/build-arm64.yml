@@ -1,0 +1,90 @@
+# ARM64 Build Workflow for UsbDk
+#
+# NOTE: Deployment to a real ARM64 device requires either:
+#   - Test-signing mode: bcdedit /set testsigning on
+#   - WHQL/EV signing for production deployment
+#
+# The windows-latest runner ships with Component.Microsoft.Windows.DriverKit
+# (WDK 10.0.26100+) as part of VS2022 Enterprise.  The WDK content root is
+# registered under HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots.
+# We discover it explicitly and pass WDKContentRoot + TargetPlatformVersion
+# to MSBuild so the WindowsKernelModeDriver10.0 toolset can resolve the
+# km\ include path (ntifs.h, wdf.h, etc.) without relying on its own
+# registry lookup, which silently fails when run inside GitHub Actions.
+
+name: Build ARM64
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build-arm64:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Locate WDK kernel headers
+        shell: powershell
+        run: |
+          # Read the WDK content root from the registry (set by the VS WDK component)
+          $kitsRoot = (Get-ItemProperty `
+            -Path  "HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots" `
+            -Name  "KitsRoot10" `
+            -ErrorAction SilentlyContinue).KitsRoot10
+          if (-not $kitsRoot) {
+            $kitsRoot = "C:\Program Files (x86)\Windows Kits\10\"
+          }
+          $kitsRoot = $kitsRoot.TrimEnd('\') + '\'
+
+          # Find the highest-versioned SDK that has km\ntifs.h
+          $includeRoot = Join-Path $kitsRoot "Include"
+          $wdkVersion = Get-ChildItem $includeRoot -Directory -ErrorAction SilentlyContinue |
+            Where-Object { Test-Path (Join-Path $_.FullName "km\ntifs.h") } |
+            Sort-Object Name -Descending |
+            Select-Object -First 1 -ExpandProperty Name
+
+          if (-not $wdkVersion) {
+            Write-Error ("WDK kernel headers (km\ntifs.h) not found under $includeRoot. " +
+                         "Ensure Component.Microsoft.Windows.DriverKit is installed.")
+            exit 1
+          }
+
+          Write-Host "WDK kernel headers: $kitsRoot (version $wdkVersion)"
+          Add-Content -LiteralPath $env:GITHUB_ENV -Value "WDK_CONTENT_ROOT=$kitsRoot"
+          Add-Content -LiteralPath $env:GITHUB_ENV -Value "WDK_VERSION=$wdkVersion"
+
+      - name: Build ARM64 Release
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=arm64 -host_arch=amd64
+          msbuild UsbDk.sln /p:Configuration="Win10 Release" /p:Platform=ARM64 /m /t:UsbDk /p:WDKContentRoot="%WDK_CONTENT_ROOT%" /p:TargetPlatformVersion="%WDK_VERSION%"
+
+      - name: Build ARM64 Debug (NoSign)
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=arm64 -host_arch=amd64
+          msbuild UsbDk.sln /p:Configuration="Win10 Debug_NoSign" /p:Platform=ARM64 /m /t:UsbDk /p:WDKContentRoot="%WDK_CONTENT_ROOT%" /p:TargetPlatformVersion="%WDK_VERSION%"
+
+      - name: Upload ARM64 Release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: usbdk-arm64-release
+          path: |
+            Install/ARM64/**/*.sys
+            Install/ARM64/**/*.inf
+            Install/ARM64/**/*.cat
+          if-no-files-found: warn
+
+      - name: Upload ARM64 Debug artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: usbdk-arm64-debug
+          path: |
+            Install_Debug/ARM64/**/*.sys
+            Install_Debug/ARM64/**/*.inf
+          if-no-files-found: warn
+

@@ -20,9 +20,20 @@ pushd ..\..\Install_Debug\x64
 
 del *.msi *.wixobj *.wixpdb
 
-"%WIX%bin\candle.exe" ..\..\Tools\Installer\UsbDkInstaller.wxs -out UsbDk_Debug.wixobj -dUsbDkVersion=%UsbDkVersion% -dConfig=%DEBUG_CFG% -dUsbDk64Bit=1
+"%WIX%bin\candle.exe" ..\..\Tools\Installer\UsbDkInstaller.wxs -out UsbDk_Debug.wixobj -dUsbDkVersion=%UsbDkVersion% -dConfig=%DEBUG_CFG% -dUsbDk64Bit=1 -dUsbDkArch=x64
 if !ERRORLEVEL! NEQ 0 exit /B 1
 "%WIX%bin\light.exe" UsbDk_Debug.wixobj -out UsbDk_Debug_%UsbDkVersion%_x64.msi -sw1076
+if !ERRORLEVEL! NEQ 0 exit /B 1
+
+popd
+
+pushd ..\..\Install_Debug\ARM64
+
+del *.msi *.wixobj *.wixpdb
+
+"%WIX%bin\candle.exe" ..\..\Tools\Installer\UsbDkInstaller.wxs -out UsbDk_Debug.wixobj -dUsbDkVersion=%UsbDkVersion% -dConfig=%DEBUG_CFG% -dUsbDkArm64=1 -dUsbDkArch=arm64
+if !ERRORLEVEL! NEQ 0 exit /B 1
+"%WIX%bin\light.exe" UsbDk_Debug.wixobj -out UsbDk_Debug_%UsbDkVersion%_arm64.msi -sw1076
 if !ERRORLEVEL! NEQ 0 exit /B 1
 
 popd
@@ -42,9 +53,20 @@ pushd ..\..\Install\x64
 
 del *.msi *.wixobj *.wixpdb
 
-"%WIX%bin\candle.exe" ..\..\Tools\Installer\UsbDkInstaller.wxs -out UsbDk.wixobj -dUsbDkVersion=%UsbDkVersion% -dConfig=Release -dUsbDk64Bit=1
+"%WIX%bin\candle.exe" ..\..\Tools\Installer\UsbDkInstaller.wxs -out UsbDk.wixobj -dUsbDkVersion=%UsbDkVersion% -dConfig=Release -dUsbDk64Bit=1 -dUsbDkArch=x64
 if !ERRORLEVEL! NEQ 0 exit /B 1
 "%WIX%bin\light.exe" UsbDk.wixobj -out UsbDk_%UsbDkVersion%_x64.msi -sw1076
+if !ERRORLEVEL! NEQ 0 exit /B 1
+
+popd
+
+pushd ..\..\Install\ARM64
+
+del *.msi *.wixobj *.wixpdb
+
+"%WIX%bin\candle.exe" ..\..\Tools\Installer\UsbDkInstaller.wxs -out UsbDk.wixobj -dUsbDkVersion=%UsbDkVersion% -dConfig=Release -dUsbDkArm64=1 -dUsbDkArch=arm64
+if !ERRORLEVEL! NEQ 0 exit /B 1
+"%WIX%bin\light.exe" UsbDk.wixobj -out UsbDk_%UsbDkVersion%_arm64.msi -sw1076
 if !ERRORLEVEL! NEQ 0 exit /B 1
 
 popd

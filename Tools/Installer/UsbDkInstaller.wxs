@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
-  <?ifdef UsbDk64Bit ?>
+  <?ifdef UsbDkArm64 ?>
+    <?define UsbDkPlatform=arm64 ?>
+    <?define UsbDkProgramFilesFolder= ProgramFiles64Folder ?>
+    <?define UsbDkWin64= yes ?>
+    <?define System32Dir= "System64Folder" ?>
+    <?define SystemWOW64Dir= "SystemFolder" ?>
+  <?elseifdef UsbDk64Bit ?>
     <?define UsbDkPlatform=x64 ?>
     <?define UsbDkProgramFilesFolder= ProgramFiles64Folder ?>
     <?define UsbDkWin64= yes ?>
@@ -110,7 +116,7 @@
           </Component>
 
           <Component Id="UsbDk_TMF" Guid="{2A06187F-4B67-4DBD-86DA-E6FB081CD1B6}" Win64="$(var.UsbDkWin64)">
-            <File Id="UsbDk_TMF" Name="UsbDk.tmf" Source="..\UsbDk.tmf" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="x64" />
+            <File Id="UsbDk_TMF" Name="UsbDk.tmf" Source="..\UsbDk.tmf" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="$(var.UsbDkPlatform)" />
           </Component>
 
         </Directory>
