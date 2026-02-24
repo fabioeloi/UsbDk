@@ -4,12 +4,13 @@
 #   - Test-signing mode: bcdedit /set testsigning on
 #   - WHQL/EV signing for production deployment
 #
-# This workflow builds the ARM64 (Win10 Release) configuration of UsbDk.
-# The windows-latest runner includes Component.Microsoft.Windows.DriverKit
-# (WDK 10.0.26100+) pre-installed as part of VS2022 Enterprise.
-# VsDevCmd.bat initialises the full VS + WDK build environment so that
-# the WindowsKernelModeDriver10.0 MSBuild toolset can locate ntifs.h and
-# the other kernel-mode headers from the km\ include directory.
+# The windows-latest runner ships with Component.Microsoft.Windows.DriverKit
+# (WDK 10.0.26100+) as part of VS2022 Enterprise, which registers the WDK
+# content root under HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots.
+# We discover that root and the installed SDK version, then pass them
+# explicitly to MSBuild so the WindowsKernelModeDriver10.0 toolset can
+# resolve the km\ include path (where ntifs.h and wdf.h live) without
+# relying on its own registry discovery, which can silently fail in CI.
 
 name: Build ARM64
 
@@ -26,17 +27,58 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Locate WDK and set build environment
+        shell: powershell
+        run: |
+          $kitsRoot = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots" `
+                         -ErrorAction SilentlyContinue).KitsRoot10
+          if (-not $kitsRoot) { $kitsRoot = "C:\Program Files (x86)\Windows Kits\10\" }
+
+          # Find the latest SDK/WDK version that has km\ntifs.h
+          $wdkVersion = $null
+          $includeRoot = Join-Path $kitsRoot "Include"
+          if (Test-Path $includeRoot) {
+            $wdkVersion = Get-ChildItem $includeRoot -Directory |
+              Where-Object { Test-Path (Join-Path $_.FullName "km\ntifs.h") } |
+              Sort-Object Name -Descending |
+              Select-Object -First 1 -ExpandProperty Name
+          }
+
+          if ($wdkVersion) {
+            Write-Host "WDK kernel headers found: $kitsRoot (version $wdkVersion)"
+          } else {
+            Write-Host "WDK kernel headers not found at $kitsRoot — downloading WDK installer..."
+            $installer = Join-Path $env:TEMP "wdksetup.exe"
+            (New-Object System.Net.WebClient).DownloadFile(
+              "https://go.microsoft.com/fwlink/?linkid=2286018", $installer)
+            $p = Start-Process $installer `
+                   -ArgumentList "/features + /quiet /norestart" `
+                   -Wait -PassThru -NoNewWindow
+            if ($p.ExitCode -notin 0, 3010) {
+              throw "WDK installer exited with code $($p.ExitCode)"
+            }
+            $wdkVersion = Get-ChildItem $includeRoot -Directory |
+              Where-Object { Test-Path (Join-Path $_.FullName "km\ntifs.h") } |
+              Sort-Object Name -Descending |
+              Select-Object -First 1 -ExpandProperty Name
+            if (-not $wdkVersion) { throw "WDK km headers still not found after install" }
+            Write-Host "WDK installed successfully (version $wdkVersion)"
+          }
+
+          "WDK_CONTENT_ROOT=$kitsRoot"  | Out-File -Append $env:GITHUB_ENV
+          "WDK_VERSION=$wdkVersion"     | Out-File -Append $env:GITHUB_ENV
+
       - name: Build ARM64 Release
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=arm64 -host_arch=amd64
-          msbuild UsbDk.sln /p:Configuration="Win10 Release" /p:Platform=ARM64 /m /t:UsbDk
+          msbuild UsbDk.sln /p:Configuration="Win10 Release" /p:Platform=ARM64 /m /t:UsbDk /p:WDKContentRoot="%WDK_CONTENT_ROOT%" /p:TargetPlatformVersion="%WDK_VERSION%"
 
       - name: Build ARM64 Debug (NoSign)
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=arm64 -host_arch=amd64
-          msbuild UsbDk.sln /p:Configuration="Win10 Debug_NoSign" /p:Platform=ARM64 /m /t:UsbDk
+          msbuild UsbDk.sln /p:Configuration="Win10 Debug_NoSign" /p:Platform=ARM64 /m /t:UsbDk /p:WDKContentRoot="%WDK_CONTENT_ROOT%" /p:TargetPlatformVersion="%WDK_VERSION%"
 
       - name: Upload ARM64 Release artifacts
         uses: actions/upload-artifact@v4
