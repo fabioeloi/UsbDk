@@ -5,9 +5,6 @@
 # For format details, see: https://gh.io/customagents/config
 ---
 
-# UsbDk ARM64 Porter
-
----
 name: usbdk-arm64-porter
 description: >
   Ports the UsbDk Windows KMDF USB kernel-mode filter driver to Windows 11
