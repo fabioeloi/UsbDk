@@ -74,7 +74,11 @@ co-installer will fail on ARM64.
 Each ARM64 configuration block:
 - Uses `<PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>` (driver)
   or `WindowsApplicationForDrivers10.0` (user-mode).
-- Sets `<WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>`.
+- For user-mode projects (`UsbDkHelper`, `UsbDkController`, `UsbDkInstHelper`),
+  sets `<WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>`;
+  this property is **not** set for the kernel driver project (`UsbDk.vcxproj`),
+  because it is only intended for Desktop ARM64 user-mode apps and causes
+  include path issues for kernel drivers.
 - Defines `_WIN64;_ARM64_;ARM64` preprocessor symbols (replacing `_AMD64_`).
 - Omits `<CallingConvention>Cdecl</CallingConvention>` for user-mode
   projects since ARM64 MSVC ignores this property.
