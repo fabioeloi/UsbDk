@@ -10,9 +10,14 @@ del *.log
 
 for %%x in (Win7, Win8, Win8.1, Win10, XP) do (
   for %%y in (%DEBUG_CFG%, Release) do (
-    for %%z in (win32, x64) do (
-      call tools\vs_run.bat UsbDk.sln /Rebuild "%%x %%y|%%z" /Out build%%y_%%x_%%z.log
-      if !ERRORLEVEL! NEQ 0 exit /B 1
+    for %%z in (win32, x64, arm64) do (
+      if /I NOT "%%z"=="arm64" (
+        call tools\vs_run.bat UsbDk.sln /Rebuild "%%x %%y|%%z" /Out build%%y_%%x_%%z.log
+        if !ERRORLEVEL! NEQ 0 exit /B 1
+      ) else if /I "%%x"=="Win10" (
+        call tools\vs_run.bat UsbDk.sln /Rebuild "%%x %%y|%%z" /Out build%%y_%%x_%%z.log
+        if !ERRORLEVEL! NEQ 0 exit /B 1
+      )
     )
   )
 )
@@ -34,6 +39,7 @@ goto BUILD_MSI
 del *.tmf *.mof
 call :make1tmf x64\Win10%1
 call :make1tmf x86\Win10%1
+call :make1tmf arm64\Win10%1
 call :make1tmf x64\Win8.1%1
 call :make1tmf x86\Win8.1%1
 call :make1tmf x64\Win8%1

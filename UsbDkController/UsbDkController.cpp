@@ -357,7 +357,7 @@ static bool Controller_ChdirToPackageFolder()
     return true;
 }
 
-int __cdecl _tmain(int argc, TCHAR* argv[])
+int _tmain(int argc, TCHAR* argv[])
 {
     if (argc > 1)
     {

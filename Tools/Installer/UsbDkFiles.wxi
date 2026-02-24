@@ -3,9 +3,12 @@
         <?define CoinstallerVersion= "01011" ?>
     <?endif?>
 
-    <File Id="UsbDk.sys$(var.OsName)" Name="UsbDk.sys" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDk.sys" Vital="yes" KeyPath="yes" DiskId="1" ProcessorArchitecture="x64"/>
-    <File Id="UsbDk.inf$(var.OsName)" Name="UsbDk.inf" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDk.inf" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="x64"/>
-    <File Id="UsbDkHelper.dll$(var.OsName)" Name="UsbDkHelper.dll" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDkHelper.dll" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="x64">
+    <?ifndef UsbDkArch ?>
+        <?define UsbDkArch= "x64" ?>
+    <?endif?>
+    <File Id="UsbDk.sys$(var.OsName)" Name="UsbDk.sys" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDk.sys" Vital="yes" KeyPath="yes" DiskId="1" ProcessorArchitecture="$(var.UsbDkArch)"/>
+    <File Id="UsbDk.inf$(var.OsName)" Name="UsbDk.inf" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDk.inf" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="$(var.UsbDkArch)"/>
+    <File Id="UsbDkHelper.dll$(var.OsName)" Name="UsbDkHelper.dll" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDkHelper.dll" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="$(var.UsbDkArch)">
         <CopyFile Id="Windows_UsbDkHelper.dll$(var.OsName)" DestinationProperty ="$(var.System32Dir)"/>
     </File>
 
@@ -17,9 +20,9 @@
 
     <?endif?>
 
-    <File Id="UsbDkController.exe$(var.OsName)" Name="UsbDkController.exe" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDkController.exe" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="x64" />
-    <File Id="UsbDkInstHelper.exe$(var.OsName)" Name="UsbDkInstHelper.exe" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDkInstHelper.exe" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="x64" />
-    <File Id="WdfCoinstaller$(var.CoinstallerVersion).dll$(var.OsName)" Name="WdfCoinstaller$(var.CoinstallerVersion).dll" Source="$(var.SourceSubPath)\UsbDk_Package\WdfCoinstaller$(var.CoinstallerVersion).dll" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="x64"/>
+    <File Id="UsbDkController.exe$(var.OsName)" Name="UsbDkController.exe" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDkController.exe" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="$(var.UsbDkArch)" />
+    <File Id="UsbDkInstHelper.exe$(var.OsName)" Name="UsbDkInstHelper.exe" Source="$(var.SourceSubPath)\UsbDk_Package\UsbDkInstHelper.exe" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="$(var.UsbDkArch)" />
+    <File Id="WdfCoinstaller$(var.CoinstallerVersion).dll$(var.OsName)" Name="WdfCoinstaller$(var.CoinstallerVersion).dll" Source="$(var.SourceSubPath)\UsbDk_Package\WdfCoinstaller$(var.CoinstallerVersion).dll" Vital="yes" KeyPath="no" DiskId="1" ProcessorArchitecture="$(var.UsbDkArch)"/>
 
     <?ifdef CoinstallerVersion ?>
         <?undef CoinstallerVersion ?>

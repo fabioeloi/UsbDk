@@ -1,0 +1,62 @@
+# ARM64 Build Workflow for UsbDk
+#
+# NOTE: Deployment to a real ARM64 device requires either:
+#   - Test-signing mode: bcdedit /set testsigning on
+#   - WHQL/EV signing for production deployment
+#
+# This workflow builds the ARM64 (Win10 Release) configuration of UsbDk
+# using the Windows Driver Kit (WDK) 10.0.22621+ on a windows-latest runner.
+
+name: Build ARM64
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build-arm64:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install WDK for Windows 11
+        shell: powershell
+        run: |
+          # Install the Windows Driver Kit (WDK) 10.0.22621+ which includes ARM64 KMDF support
+          winget install --id Microsoft.WindowsDriverKit --silent --accept-package-agreements --accept-source-agreements
+        continue-on-error: true
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build ARM64 Release
+        shell: cmd
+        run: |
+          msbuild UsbDk.sln /p:Configuration="Win10 Release" /p:Platform=ARM64 /m /t:UsbDk
+
+      - name: Build ARM64 Debug (NoSign)
+        shell: cmd
+        run: |
+          msbuild UsbDk.sln /p:Configuration="Win10 Debug_NoSign" /p:Platform=ARM64 /m /t:UsbDk
+
+      - name: Upload ARM64 Release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: usbdk-arm64-release
+          path: |
+            Install/ARM64/**/*.sys
+            Install/ARM64/**/*.inf
+            Install/ARM64/**/*.cat
+          if-no-files-found: warn
+
+      - name: Upload ARM64 Debug artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: usbdk-arm64-debug
+          path: |
+            Install_Debug/ARM64/**/*.sys
+            Install_Debug/ARM64/**/*.inf
+          if-no-files-found: warn

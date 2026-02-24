@@ -42,7 +42,7 @@ NTSTATUS WdfUsbTargetDeviceCreateIsochUrb(WDFUSBDEVICE UsbDevice, PWDF_OBJECT_AT
 extern "C"
 {
 
-#ifdef _WIN64
+#if defined(_WIN64) && !defined(_M_ARM64)
     NTSTATUS __guard_check_icall_fptr(...)
     {
         return STATUS_SUCCESS;
@@ -52,7 +52,7 @@ extern "C"
     {
         return STATUS_SUCCESS;
     }
-#else
+#elif !defined(_WIN64)
     NTSTATUS _cdecl __guard_check_icall_fptr(...)
     {
         return STATUS_SUCCESS;
