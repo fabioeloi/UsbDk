@@ -48,8 +48,8 @@ jobs:
             Select-Object -First 1 -ExpandProperty Name
 
           if (-not $wdkVersion) {
-            Write-Error "WDK kernel headers (km\ntifs.h) not found under $includeRoot. " +
-                        "Ensure Component.Microsoft.Windows.DriverKit is installed."
+            Write-Error ("WDK kernel headers (km\ntifs.h) not found under $includeRoot. " +
+                         "Ensure Component.Microsoft.Windows.DriverKit is installed.")
             exit 1
           }
 
