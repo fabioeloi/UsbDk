@@ -5,12 +5,12 @@
 #   - WHQL/EV signing for production deployment
 #
 # The windows-latest runner ships with Component.Microsoft.Windows.DriverKit
-# (WDK 10.0.26100+) as part of VS2022 Enterprise, which registers the WDK
-# content root under HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots.
-# We discover that root and the installed SDK version, then pass them
-# explicitly to MSBuild so the WindowsKernelModeDriver10.0 toolset can
-# resolve the km\ include path (where ntifs.h and wdf.h live) without
-# relying on its own registry discovery, which can silently fail in CI.
+# (WDK 10.0.26100+) as part of VS2022 Enterprise.  The WDK content root is
+# registered under HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots.
+# We discover it explicitly and pass WDKContentRoot + TargetPlatformVersion
+# to MSBuild so the WindowsKernelModeDriver10.0 toolset can resolve the
+# km\ include path (ntifs.h, wdf.h, etc.) without relying on its own
+# registry lookup, which silently fails when run inside GitHub Actions.
 
 name: Build ARM64
 
@@ -27,46 +27,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Locate WDK and set build environment
+      - name: Locate WDK kernel headers
         shell: powershell
         run: |
-          $kitsRoot = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots" `
-                         -ErrorAction SilentlyContinue).KitsRoot10
-          if (-not $kitsRoot) { $kitsRoot = "C:\Program Files (x86)\Windows Kits\10\" }
+          # Read the WDK content root from the registry (set by the VS WDK component)
+          $kitsRoot = (Get-ItemProperty `
+            -Path  "HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots" `
+            -Name  "KitsRoot10" `
+            -ErrorAction SilentlyContinue).KitsRoot10
+          if (-not $kitsRoot) {
+            $kitsRoot = "C:\Program Files (x86)\Windows Kits\10\"
+          }
+          $kitsRoot = $kitsRoot.TrimEnd('\') + '\'
 
-          # Find the latest SDK/WDK version that has km\ntifs.h
-          $wdkVersion = $null
+          # Find the highest-versioned SDK that has km\ntifs.h
           $includeRoot = Join-Path $kitsRoot "Include"
-          if (Test-Path $includeRoot) {
-            $wdkVersion = Get-ChildItem $includeRoot -Directory |
-              Where-Object { Test-Path (Join-Path $_.FullName "km\ntifs.h") } |
-              Sort-Object Name -Descending |
-              Select-Object -First 1 -ExpandProperty Name
+          $wdkVersion = Get-ChildItem $includeRoot -Directory -ErrorAction SilentlyContinue |
+            Where-Object { Test-Path (Join-Path $_.FullName "km\ntifs.h") } |
+            Sort-Object Name -Descending |
+            Select-Object -First 1 -ExpandProperty Name
+
+          if (-not $wdkVersion) {
+            Write-Error "WDK kernel headers (km\ntifs.h) not found under $includeRoot. " +
+                        "Ensure Component.Microsoft.Windows.DriverKit is installed."
+            exit 1
           }
 
-          if ($wdkVersion) {
-            Write-Host "WDK kernel headers found: $kitsRoot (version $wdkVersion)"
-          } else {
-            Write-Host "WDK kernel headers not found at $kitsRoot — downloading WDK installer..."
-            $installer = Join-Path $env:TEMP "wdksetup.exe"
-            (New-Object System.Net.WebClient).DownloadFile(
-              "https://go.microsoft.com/fwlink/?linkid=2286018", $installer)
-            $p = Start-Process $installer `
-                   -ArgumentList "/features + /quiet /norestart" `
-                   -Wait -PassThru -NoNewWindow
-            if ($p.ExitCode -notin 0, 3010) {
-              throw "WDK installer exited with code $($p.ExitCode)"
-            }
-            $wdkVersion = Get-ChildItem $includeRoot -Directory |
-              Where-Object { Test-Path (Join-Path $_.FullName "km\ntifs.h") } |
-              Sort-Object Name -Descending |
-              Select-Object -First 1 -ExpandProperty Name
-            if (-not $wdkVersion) { throw "WDK km headers still not found after install" }
-            Write-Host "WDK installed successfully (version $wdkVersion)"
-          }
-
-          "WDK_CONTENT_ROOT=$kitsRoot"  | Out-File -Append $env:GITHUB_ENV
-          "WDK_VERSION=$wdkVersion"     | Out-File -Append $env:GITHUB_ENV
+          Write-Host "WDK kernel headers: $kitsRoot (version $wdkVersion)"
+          Add-Content -LiteralPath $env:GITHUB_ENV -Value "WDK_CONTENT_ROOT=$kitsRoot"
+          Add-Content -LiteralPath $env:GITHUB_ENV -Value "WDK_VERSION=$wdkVersion"
 
       - name: Build ARM64 Release
         shell: cmd
