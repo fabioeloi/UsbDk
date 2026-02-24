@@ -9,6 +9,10 @@
       <Configuration>Win10 Debug_NoSign</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Win10 Debug_NoSign|ARM64">
+      <Configuration>Win10 Debug_NoSign</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Win10 Debug|Win32">
       <Configuration>Win10 Debug</Configuration>
       <Platform>Win32</Platform>
@@ -17,6 +21,10 @@
       <Configuration>Win10 Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Win10 Debug|ARM64">
+      <Configuration>Win10 Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Win10 Release|Win32">
       <Configuration>Win10 Release</Configuration>
       <Platform>Win32</Platform>
@@ -24,6 +32,10 @@
     <ProjectConfiguration Include="Win10 Release|x64">
       <Configuration>Win10 Release</Configuration>
       <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Win10 Release|ARM64">
+      <Configuration>Win10 Release</Configuration>
+      <Platform>ARM64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Win7 Debug_NoSign|Win32">
       <Configuration>Win7 Debug_NoSign</Configuration>
@@ -128,6 +140,7 @@
     <RootNamespace>UsbDkHelper</RootNamespace>
     <WindowsTargetPlatformVersion>$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
     <TargetVersion>Windows7</TargetVersion>
+    <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'" Label="Configuration">
@@ -197,7 +210,21 @@
     <CharacterSet>Unicode</CharacterSet>
     <DriverTargetPlatform>Desktop</DriverTargetPlatform>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsApplicationForDrivers10.0</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <DriverTargetPlatform>Desktop</DriverTargetPlatform>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>WindowsApplicationForDrivers10.0</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <DriverTargetPlatform>Desktop</DriverTargetPlatform>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>WindowsApplicationForDrivers10.0</PlatformToolset>
@@ -323,6 +350,14 @@
     <CharacterSet>Unicode</CharacterSet>
     <DriverTargetPlatform>Desktop</DriverTargetPlatform>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>WindowsApplicationForDrivers10.0</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <DriverTargetPlatform>Desktop</DriverTargetPlatform>
+  </PropertyGroup>
   <Import Project="..\Tools\Driver.Initial.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -360,7 +395,13 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'" Label="PropertySheets">
@@ -417,6 +458,9 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -462,7 +506,15 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Install_Debug\$(Platform)\$(ConfigurationName)\</OutDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Install_Debug\$(Platform)\$(ConfigurationName)\</OutDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Install_Debug\$(Platform)\$(ConfigurationName)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Install_Debug\$(Platform)\$(ConfigurationName)\</OutDir>
   </PropertyGroup>
@@ -541,6 +593,10 @@
     <OutDir>$(SolutionDir)Install\$(Platform)\$(ConfigurationName)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Install\$(Platform)\$(ConfigurationName)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Install\$(Platform)\$(ConfigurationName)\</OutDir>
   </PropertyGroup>
@@ -824,6 +880,29 @@
       <PreprocessorDefinitions>USBDK_MAJOR_VERSION=$(USBDK_MAJOR_VERSION);USBDK_MINOR_VERSION=$(USBDK_MINOR_VERSION);USBDK_BUILD_NUMBER=$(USBDK_BUILD_NUMBER);_WIN64;_AMD64_=1;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);KMDF_VERSION_MAJOR=1;KMDF_VERSION_MINOR=11;BUILD_DLL</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)\UsbDk;$(WDKContentRoot)\Include\wdf\kmdf\1.11</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Setupapi.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <ResourceCompile>
+      <PreprocessorDefinitions>USBDK_MAJOR_VERSION=$(USBDK_MAJOR_VERSION);USBDK_MINOR_VERSION=$(USBDK_MINOR_VERSION);USBDK_BUILD_NUMBER=$(USBDK_BUILD_NUMBER);_WIN64;_ARM64_=1;ARM64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">
     <ClCompile>
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -846,6 +925,29 @@
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>USBDK_MAJOR_VERSION=$(USBDK_MAJOR_VERSION);USBDK_MINOR_VERSION=$(USBDK_MINOR_VERSION);USBDK_BUILD_NUMBER=$(USBDK_BUILD_NUMBER);_WIN64;_AMD64_=1;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);KMDF_VERSION_MAJOR=1;KMDF_VERSION_MINOR=11;BUILD_DLL</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)\UsbDk;$(WDKContentRoot)\Include\wdf\kmdf\1.11</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Setupapi.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <ResourceCompile>
+      <PreprocessorDefinitions>USBDK_MAJOR_VERSION=$(USBDK_MAJOR_VERSION);USBDK_MINOR_VERSION=$(USBDK_MINOR_VERSION);USBDK_BUILD_NUMBER=$(USBDK_BUILD_NUMBER);_WIN64;_ARM64_=1;ARM64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">
@@ -1333,6 +1435,33 @@
       <PreprocessorDefinitions>USBDK_MAJOR_VERSION=$(USBDK_MAJOR_VERSION);USBDK_MINOR_VERSION=$(USBDK_MINOR_VERSION);USBDK_BUILD_NUMBER=$(USBDK_BUILD_NUMBER);_WIN64;_AMD64_=1;AMD64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);KMDF_VERSION_MAJOR=1;KMDF_VERSION_MINOR=11;BUILD_DLL</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir)\UsbDk;$(WDKContentRoot)\Include\wdf\kmdf\1.11</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Setupapi.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <ResourceCompile>
+      <PreprocessorDefinitions>USBDK_MAJOR_VERSION=$(USBDK_MAJOR_VERSION);USBDK_MINOR_VERSION=$(USBDK_MINOR_VERSION);USBDK_BUILD_NUMBER=$(USBDK_BUILD_NUMBER);_WIN64;_ARM64_=1;ARM64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">false</CompileAsManaged>
@@ -1346,7 +1475,9 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win7 Debug_NoSign|Win32'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='XP Debug|Win32'">false</CompileAsManaged>
@@ -1366,7 +1497,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Debug_NoSign|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='XP Debug|Win32'">Use</PrecompiledHeader>
@@ -1385,6 +1518,7 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win10 Release|Win32'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Release|Win32'">Use</PrecompiledHeader>
@@ -1395,6 +1529,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="DriverAccess.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
@@ -1423,10 +1558,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="DriverFile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
@@ -1455,10 +1593,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Exception.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
@@ -1487,10 +1628,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Installer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
@@ -1519,10 +1663,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RedirectorAccess.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
@@ -1551,10 +1698,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RegAccess.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
@@ -1583,10 +1733,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="DeviceMgr.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
@@ -1615,10 +1768,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RuleManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|Win32'">Use</PrecompiledHeader>
@@ -1639,6 +1795,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='XP Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|x64'">Use</PrecompiledHeader>
@@ -1648,7 +1805,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug_NoSign|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -1664,10 +1823,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug_NoSign|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">Use</PrecompiledHeader>
@@ -1711,15 +1873,19 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="tstrings.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug_NoSign|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">Use</PrecompiledHeader>
@@ -1746,7 +1912,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="GuidGen.cpp">
@@ -1768,6 +1936,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='XP Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|x64'">Use</PrecompiledHeader>
@@ -1777,7 +1946,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug_NoSign|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -1808,14 +1979,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="WdfCoinstaller.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Release|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Debug_NoSign|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">Use</PrecompiledHeader>
@@ -1842,7 +2017,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug_NoSign|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win10 Debug_NoSign|ARM64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>

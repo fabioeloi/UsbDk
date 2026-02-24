@@ -39,6 +39,8 @@ NTSTATUS WdfUsbTargetDeviceCreateIsochUrb(WDFUSBDEVICE UsbDevice, PWDF_OBJECT_AT
     return status;
 }
 
+// ARM64 never supported Windows XP; CFG stubs are only needed for x86/x64 XP targets.
+#if !defined(_M_ARM64)
 extern "C"
 {
 
@@ -59,4 +61,5 @@ extern "C"
     }
 #endif
 }
+#endif // !defined(_M_ARM64)
 #endif
