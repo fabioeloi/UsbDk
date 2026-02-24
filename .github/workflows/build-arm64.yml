@@ -23,11 +23,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install WDK for Windows 11
-        shell: powershell
+        shell: cmd
         run: |
-          # Install the Windows Driver Kit (WDK) 10.0.22621+ which includes ARM64 KMDF support
-          winget install --id Microsoft.WindowsDriverKit --silent --accept-package-agreements --accept-source-agreements
-        continue-on-error: true
+          choco install windowsdriverkit10 -y --no-progress
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
