@@ -18,6 +18,12 @@ Common property definitions used by all drivers:
   <PropertyGroup Condition="'$(TargetVersion)'=='Windows10'">
   <_NT_TARGET_VERSION>0x0A00</_NT_TARGET_VERSION>
   </PropertyGroup>
+  <!-- Windows 11 shares the same NT version as Windows 10 (10.0.x);
+       ARM64 targets must use Win10 or Windows11 configurations.
+       KMDF ARM64 requires WDK 10.0.22621+ (Windows 11 SDK). -->
+  <PropertyGroup Condition="'$(TargetVersion)'=='Windows11'">
+    <_NT_TARGET_VERSION>0x0A00</_NT_TARGET_VERSION>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(TargetVersion)'=='WindowsV6.3'">
     <_NT_TARGET_VERSION>0x0603</_NT_TARGET_VERSION>
   </PropertyGroup>

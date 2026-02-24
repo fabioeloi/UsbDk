@@ -357,7 +357,11 @@ static bool Controller_ChdirToPackageFolder()
     return true;
 }
 
+#if defined(_M_ARM64)
+int _tmain(int argc, TCHAR* argv[])
+#else
 int __cdecl _tmain(int argc, TCHAR* argv[])
+#endif
 {
     if (argc > 1)
     {

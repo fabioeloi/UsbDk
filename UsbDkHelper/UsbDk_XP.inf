@@ -5,6 +5,9 @@
 ; Authors:
 ;  Dmitry Fleytman  <dfleytma@redhat.com>
 ;
+; NOTE: This INF targets Windows XP (x86/x64 only).
+;       ARM64 is NOT supported for XP targets.
+;       For ARM64 support, use UsbDk.inf with Win10+ configurations.
 
 [Version]
 Signature="$WINDOWS NT$"

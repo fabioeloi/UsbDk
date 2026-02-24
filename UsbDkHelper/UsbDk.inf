@@ -14,3 +14,10 @@ KmdfService = UsbDk, UsbDk_Service_kmdfInst
 
 [UsbDk_Service_kmdfInst]
 KmdfLibraryVersion = 1.11
+
+; ARM64 section: KMDF 1.33 as shipped with WDK 10.0.22621+ (Windows 11)
+[UsbDk.NTarm64.Wdf]
+KmdfService = UsbDk, UsbDk_Service_Arm64_kmdfInst
+
+[UsbDk_Service_Arm64_kmdfInst]
+KmdfLibraryVersion = 1.33

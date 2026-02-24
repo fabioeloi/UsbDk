@@ -1,0 +1,49 @@
+# GitHub Actions workflow for building UsbDk ARM64
+#
+# This workflow builds the ARM64 (Win10) configurations of UsbDk.
+# ARM64 kernel drivers require either test-signing (bcdedit /set testsigning on)
+# or WHQL/EV signing for production deployment on Windows 11 ARM64.
+#
+# Prerequisites:
+#   - WDK 10.0.22621+ (Windows 11 SDK) with ARM64 build tools
+#   - Visual Studio 2022 with ARM64/ARM64EC build tools component
+#
+name: ARM64 Build
+
+on:
+  push:
+    branches: [ main, master, 'port/win11-arm64' ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-arm64:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        configuration: ['Win10 Release', 'Win10 Debug']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build ARM64 ${{ matrix.configuration }}
+        shell: cmd
+        run: |
+          msbuild UsbDk.sln /p:Configuration="${{ matrix.configuration }}" /p:Platform=ARM64 /m /v:minimal
+
+      - name: Upload ARM64 artifacts
+        uses: actions/upload-artifact@v4
+        if: matrix.configuration == 'Win10 Release'
+        with:
+          name: usbdk-arm64-release
+          path: |
+            **/*.sys
+            **/*.dll
+            **/*.exe
+            **/*.inf
+            **/*.cat
+          retention-days: 30
